@@ -28,7 +28,15 @@ module.exports = mongoose => {
       },
       avatar: {
         type: String,
-        trim: true
+        trim: true,
+        default: function() {
+          if (this.displayName) {
+            return `https://avatars.dicebear.com/api/initials/${this.displayName
+              .trim()
+              .replace(/ /g, "-")}.svg`;
+          }
+          return null;
+        }
       },
       role: {
         type: String,
