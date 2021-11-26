@@ -1,12 +1,8 @@
-module.exports = app => {
-    const user = require("../controllers/user.controller.js");
+const user = require("../controllers/user.controller");
+const router = require("express").Router();
 
-    const router = require("express").Router();
+module.exports = (app) => {
+  router.get("/", user.findAll);
 
-    // Create a new User
-    router.post("/", user.create);
-
-    router.get("/", user.findAll);
-
-    app.use('/api/user', router);
+  app.use("/api/user", router);
 };
