@@ -28,9 +28,19 @@ exports.create = (req, res) => {
   });
 };
 
-// Retrieve all Users from the database.
 exports.findAll = async (req, res) => {
-  const response = await User.find({});
+  try {
+    const result = await User.find({});
+    debug("Return all users");
+    res.status(200).json({
+      products: result.map((item) => item),
+    });
+  } catch (e) {
+    debug(e.message || "Error during get all users");
+    res.status(500).send({
+      message: e.message || "Error during get all users",
+    });
+  }
 };
 
 // Find a single User with an id
