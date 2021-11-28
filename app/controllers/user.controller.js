@@ -30,10 +30,23 @@ exports.create = (req, res) => {
 
 exports.findAll = async (req, res) => {
   try {
-    const result = await User.find({});
+    const result = await User.find({}).populate("roles");
     debug("Return all users");
     res.status(200).json({
-      products: result.map((item) => item),
+      users: result.map((item) => {
+        const { displayName, email, phone, avatar, roles, approved, createdAt } =
+            item;
+        return {
+          id: item._id,
+          email,
+          displayName,
+          phone,
+          avatar,
+          roles: roles.map((role) => role.name),
+          approved,
+          createdAt,
+        }
+      }),
     });
   } catch (e) {
     debug(e.message || "Error during get all users");

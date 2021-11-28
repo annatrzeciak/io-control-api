@@ -108,50 +108,36 @@ exports.login = (req, res) => {
 };
 
 exports.user = (req, res) => {
-  const authorization = req.headers.authorization;
+  if (!req.userId) {
+    return res.status(401).send("unauthorized");
+  }
+  User.findOne({ _id: req.userId })
+    .populate("roles", "-__v")
+    .exec((err, user) => {
+      if (err) {
+        res.status(500).send({ message: err });
+        return;
+      }
 
-  if (authorization) {
-    const token = authorization.split(" ")[1];
-    let decoded;
-    try {
-      decoded = jwt.verify(token, config.SECRET);
-    } catch (e) {
-      return res.status(401).send("unauthorized");
-    }
-    const userId = decoded.id;
-    User.findOne({ _id: userId })
-      .populate("roles", "-__v")
-      .exec((err, user) => {
-        if (err) {
-          res.status(500).send({ message: err });
-          return;
-        }
+      if (!user) {
+        return res.status(404).send({ message: "User Not found." });
+      }
+      const { displayName, email, phone, avatar, roles, approved, createdAt } =
+        user;
 
-        if (!user) {
-          return res.status(404).send({ message: "User Not found." });
-        }
-        const {
-          displayName,
+      return res.status(200).send({
+        user: {
+          id: req.userId,
           email,
+          displayName,
           phone,
           avatar,
-          roles,
+          roles: roles.map((role) => role.name),
           approved,
           createdAt,
-        } = user;
-
-        return res.status(200).send({
-          user: {
-            email,
-            displayName,
-            phone,
-            avatar,
-            roles: roles.map((role) => role.name),
-            approved,
-            createdAt,
-          },
-        });
+        },
       });
-  }
+    });
+
   return res.status(500);
 };

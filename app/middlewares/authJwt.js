@@ -5,7 +5,9 @@ const User = db.user;
 const Role = db.role;
 
 verifyToken = (req, res, next) => {
-  let token = req.headers["x-access-token"];
+  const authorization = req.headers.authorization;
+
+  const token = authorization.split(" ")[1];
 
   if (!token) {
     return res.status(403).send({ message: "No token provided!" });
@@ -44,7 +46,7 @@ isAdmin = (req, res, next) => {
           }
         }
 
-        res.status(403).send({ message: "Require Admin Role!" });
+        res.status(403).send({ message: "Required admin role" });
         return;
       }
     );
@@ -75,7 +77,7 @@ isModerator = (req, res, next) => {
           }
         }
 
-        res.status(403).send({ message: "Require Moderator Role!" });
+        res.status(403).send({ message: "Required moderator role" });
         return;
       }
     );

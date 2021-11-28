@@ -3,7 +3,7 @@ const router = require("express").Router();
 const { authJwt } = require("../middlewares");
 
 module.exports = (app) => {
-  router.get("/", user.findAll);
+  router.get("/", [authJwt.verifyToken, authJwt.isModerator], user.findAll);
 
-  app.use("/api/users", [authJwt.verifyToken, authJwt.isModerator], router);
+  app.use("/api/users", router);
 };
