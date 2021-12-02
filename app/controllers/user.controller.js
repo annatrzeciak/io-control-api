@@ -41,6 +41,7 @@ exports.findAll = async (req, res) => {
           avatar,
           roles,
           approved,
+          approvedAt,
           createdAt,
         } = item;
         return {
@@ -51,14 +52,14 @@ exports.findAll = async (req, res) => {
           avatar,
           roles: roles.map((role) => role.name),
           approved,
+          approvedAt,
           createdAt,
         };
       }),
     });
   } catch (e) {
-    debug(e.message || "Error during get all users");
     res.status(500).send({
-      message: e.message || "Error during get all users",
+      message: "Error during get all users. " + e.message,
     });
   }
 };
@@ -72,7 +73,7 @@ exports.confirmUser = async (req, res) => {
     res.send({ message: "User was updated successfully!" });
   } catch (e) {
     res.status(500).send({
-      message: e.message || "Error during approve user",
+      message: "Error during approve user. " + e.message,
     });
   }
 };
@@ -83,7 +84,18 @@ exports.findOne = (req, res) => {};
 exports.update = (req, res) => {};
 
 // Delete a User with the specified id in the request
-exports.delete = (req, res) => {};
+exports.delete = async (req, res) => {
+  if(req.params.userid) {
+    try {
+      await User.deleteOne({_id: req.params.userid});
+      res.send({message: "User was deleted successfully!"});
+    } catch (e) {
+      res.status(500).send({
+        message: "Error during delete user. " + e.message,
+      });
+    }
+  }
+};
 
 // Delete all Users from the database.
 exports.deleteAll = (req, res) => {};
