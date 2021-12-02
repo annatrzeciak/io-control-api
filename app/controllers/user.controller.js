@@ -34,8 +34,15 @@ exports.findAll = async (req, res) => {
     debug("Return all users");
     res.status(200).json({
       users: result.map((item) => {
-        const { displayName, email, phone, avatar, roles, approved, createdAt } =
-            item;
+        const {
+          displayName,
+          email,
+          phone,
+          avatar,
+          roles,
+          approved,
+          createdAt,
+        } = item;
         return {
           id: item._id,
           email,
@@ -45,7 +52,7 @@ exports.findAll = async (req, res) => {
           roles: roles.map((role) => role.name),
           approved,
           createdAt,
-        }
+        };
       }),
     });
   } catch (e) {
@@ -56,6 +63,19 @@ exports.findAll = async (req, res) => {
   }
 };
 
+exports.confirmUser = async (req, res) => {
+  const user = await User.findById(req.params.userid);
+  user.approved = true;
+  user.approvedAt = new Date();
+  try {
+    await user.save();
+    res.send({ message: "User was updated successfully!" });
+  } catch (e) {
+    res.status(500).send({
+      message: e.message || "Error during approve user",
+    });
+  }
+};
 // Find a single User with an id
 exports.findOne = (req, res) => {};
 
