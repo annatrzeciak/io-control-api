@@ -1,6 +1,3 @@
-const bcrypt = require("bcryptjs");
-const saltRounds = 8;
-
 module.exports = (mongoose) => {
   const userSchema = mongoose.Schema(
     {
@@ -54,12 +51,6 @@ module.exports = (mongoose) => {
       versionKey: false,
     }
   );
-
-  // userSchema.pre("save", function(next) {
-  //   if (this.password !== undefined)
-  //     this.password = bcrypt.hashSync(this.password, saltRounds);
-  //   next();
-  // });
 
   userSchema.method("toJSON", function () {
     const { __v, _id, ...object } = this.toObject();
