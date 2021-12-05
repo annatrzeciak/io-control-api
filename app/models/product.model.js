@@ -3,7 +3,7 @@ module.exports = (mongoose) => {
     _id: { type: mongoose.Schema.ObjectId },
     details_id: { type: String },
     name: { type: String, required: true },
-    name_pl: { type: String, required: false },
+    namePl: { type: String, required: false },
     cat: { type: String, required: true },
     reporturl: { type: String, required: false },
     photo: { type: String, required: false },

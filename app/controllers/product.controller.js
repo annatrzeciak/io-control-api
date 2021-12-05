@@ -18,6 +18,42 @@ exports.findAll = async (req, res) => {
   }
 };
 
+exports.search = async (req, res) => {
+  try {
+    const words = req.params.value
+      .replace(/,/g, "")
+      .split(" ")
+      .filter((word) => word.length >= 3);
+    let findParams;
+    if (req.query.lang === "en") {
+      findParams = words.map((word) => ({
+        name: { $regex: word, $options: "ix" },
+      }));
+    } else {
+      findParams = words.map((word) => ({
+        namePl: { $regex: word, $options: "ix" },
+      }));
+    }
+    if (!words.length) {
+      res.status(400).send({
+        message: "The minimum length is 3 characters",
+      });
+      return;
+    }
+    const result = await Product.find({
+      $or: [...findParams],
+    });
+    debug("Return products by name");
+    res.status(200).json({
+      products: result.map((item) => item),
+    });
+  } catch (e) {
+    res.status(500).send({
+      message: "Error during get products. " + e.message,
+    });
+  }
+};
+
 // Find a single Product with an id
 exports.findOne = (req, res) => {};
 
