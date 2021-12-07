@@ -85,10 +85,16 @@ exports.update = (req, res) => {};
 
 // Delete a User with the specified id in the request
 exports.delete = async (req, res) => {
-  if(req.params.userid) {
+  if (req.params.userid === req.userId) {
+    res.status(400).send({
+      message: "You cannot delete your account",
+    });
+    return;
+  }
+  if (req.params.userid) {
     try {
-      await User.deleteOne({_id: req.params.userid});
-      res.send({message: "User was deleted successfully!"});
+      await User.deleteOne({ _id: req.params.userid });
+      res.send({ message: "User was deleted successfully!" });
     } catch (e) {
       res.status(500).send({
         message: "Error during delete user. " + e.message,
