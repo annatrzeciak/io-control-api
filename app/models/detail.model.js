@@ -1,7 +1,6 @@
 module.exports = (mongoose) => {
   const detailSchema = mongoose.Schema({
     _id: { type: mongoose.Schema.ObjectId, required: true },
-    old_id: { type: Number, required: true },
     energyKcal: { type: Object, required: false },
     energyKj: { type: Object, required: false },
     fat: { type: Object, required: false },

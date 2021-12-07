@@ -42,7 +42,7 @@ exports.search = async (req, res) => {
     }
     const result = await Product.find({
       $or: [...findParams],
-    });
+    }).populate("details");
     debug("Return products by name");
     res.status(200).json({
       products: result.map((item) => item),

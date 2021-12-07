@@ -1,7 +1,6 @@
 module.exports = (mongoose) => {
   const productSchema = mongoose.Schema({
     _id: { type: mongoose.Schema.ObjectId },
-    details_id: { type: String },
     name: { type: String, required: true },
     namePl: { type: String, required: false },
     cat: { type: String, required: true },
@@ -19,12 +18,10 @@ module.exports = (mongoose) => {
       ref: "user",
       required: false,
     },
-  });
-  productSchema.virtual("details", {
-    ref: "det",
-    localField: "details_id",
-    foreignField: "_id",
-    justOne: true,
+    details: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "detail",
+    },
   });
   productSchema.method("toJSON", function () {
     const { __v, _id, id, ...object } = this.toObject();
