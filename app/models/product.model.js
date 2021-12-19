@@ -1,6 +1,5 @@
 module.exports = (mongoose) => {
   const productSchema = mongoose.Schema({
-    _id: { type: mongoose.Schema.ObjectId },
     name: { type: String, required: true },
     namePl: { type: String, required: false },
     cat: { type: String, required: true },
@@ -25,7 +24,7 @@ module.exports = (mongoose) => {
   });
   productSchema.method("toJSON", function () {
     const { __v, _id, id, ...object } = this.toObject();
-    object.id = _id;
+    object._id = _id;
     return object;
   });
 

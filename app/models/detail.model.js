@@ -1,6 +1,5 @@
 module.exports = (mongoose) => {
   const detailSchema = mongoose.Schema({
-    _id: { type: mongoose.Schema.ObjectId, required: true },
     energyKcal: { type: Object, required: false },
     energyKj: { type: Object, required: false },
     fat: { type: Object, required: false },
@@ -67,7 +66,7 @@ module.exports = (mongoose) => {
   });
   detailSchema.method("toJSON", function () {
     const { __v, _id, ...object } = this.toObject();
-    object.id = _id;
+    object._id = _id;
     return object;
   });
 

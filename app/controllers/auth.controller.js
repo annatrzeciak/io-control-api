@@ -97,7 +97,7 @@ exports.login = (req, res) => {
       });
     }
 
-    const token = jwt.sign({ id: user.id }, config.SECRET, {
+    const token = jwt.sign({ _id: user._id }, config.SECRET, {
       expiresIn: 86400, // 24 hours
     });
 
@@ -127,7 +127,7 @@ exports.user = (req, res) => {
 
       return res.status(200).send({
         user: {
-          id: req.userId,
+          _id: req.userId,
           email,
           displayName,
           phone,
