@@ -3,7 +3,7 @@ module.exports = (mongoose) => {
     date: { type: String },
     addedAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },
-    mealName: { type: String, required: true },
+    meal: { type: Number, required: true },
     products: [
       {
         product: { type: mongoose.Schema.ObjectId, ref: "product" },
