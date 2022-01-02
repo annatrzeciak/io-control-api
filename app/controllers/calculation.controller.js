@@ -32,7 +32,7 @@ exports.create = (req, res) => {
 exports.findAll = (req, res) => {
   Calculation.find({ userId: req.userId })
     .populate({
-      path: "products.product",
+      path: "product",
       model: "product",
       populate: [
         {
@@ -69,6 +69,7 @@ exports.update = (req, res) => {
     req.params.id,
     {
       ...req.body,
+      updatedAt: new Date(),
     },
     (error, result) => {
       if (error) {
@@ -86,7 +87,35 @@ exports.update = (req, res) => {
   );
 };
 // Delete a User with the specified id in the request
-exports.delete = async (req, res) => {};
+exports.delete = async (req, res) => {
+  if (!req.params.id) {
+    res.status(400).send({
+      message: "Missing calculation id",
+    });
+    return;
+  }
+
+  Calculation.deleteOne(
+    { _id: req.params.id, userId: req.userId },
+    (error, result) => {
+      if (error) {
+        res.status(500).send({
+          message: "Could not delete Calculation with id=" + req.params.id,
+        });
+        return;
+      }
+      if (!result) {
+        res.status(404).send({
+          message: `Cannot delete Calculation with id=${req.params.id}. Maybe Calculation was not found!`,
+        });
+      } else {
+        res.send({
+          message: "Calculation was deleted successfully!",
+        });
+      }
+    }
+  );
+};
 
 // Delete all Users from the database.
 exports.deleteAll = (req, res) => {};

@@ -4,12 +4,8 @@ module.exports = (mongoose) => {
     addedAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },
     meal: { type: Number, required: true },
-    products: [
-      {
-        product: { type: mongoose.Schema.ObjectId, ref: "product" },
-        count: { type: Number, required: true, default: 100 },
-      },
-    ],
+    product: { type: mongoose.Schema.ObjectId, ref: "product" },
+    count: { type: Number, required: true, default: 100 },
     userId: { type: mongoose.Schema.ObjectId, ref: "user" },
   });
 
